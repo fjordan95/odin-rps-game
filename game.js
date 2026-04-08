@@ -1,76 +1,82 @@
-//declare computerChoice variable
-let computerChoice = "";
-//getComputerChoice function
-function getComputerChoice() {
-  //choose a random number and reduce to three options
-let randomNumber = Math.floor(Math.random() * 100) % 3;
-//option 1 rock, option 2 paper, option 3 scissors
-//can i make this smaller?
-switch(randomNumber) {
-    case 0:
-      computerChoice = "rock";
-      break;
-    case 1:
-      computerChoice = "paper";
-      break;
-    case 2:
-      computerChoice = "scissors";
-      break;
-  }
-      return computerChoice;
-  };
-
-//humanChoice function: accept input, return input value
-//define humanChoice variable
-let humanChoice = "";
-function getHumanChoice () {
-//accept input
-let input = prompt("Rock, Paper, or Scissors");
-//make all lowercase
-//assign result to humanChoice
-return humanChoice = input.toLowerCase();
-}
-
-
 function playGame() {
+  //get computer choice function
+  function getComputerChoice() {
+    //establish options
+    let options = ["rock", "paper", "scissors"];
+    //choose random option of 3
+    let computerChoiceIndex = Math.round((Math.random() * 10) % 3);
+    //print option
+    let computerChoice = options[computerChoiceIndex];
+    return computerChoice;
+  }
 
-//score keeping: tracks score
-//create humanScore
-let humanScore = 0;
-//create computerScore
-let computerScore = 0;
-
-function playRound() {
-  console.log(getComputerChoice());
-  console.log(getHumanChoice());
-
-    //if human wins, (rock, scissors) || (scissors, paper) || (paper, rock)
-  if (
-    (humanChoice == "rock" && computerChoice == "scissors") ||
-    (humanChoice == "scissors" && computerChoice == "paper")||
-    (humanChoice == "paper" && computerChoice == "rock")) {
-    
-    humanScore++; } else if (
-    
-    //if computer wins, (scissors, rock) || (paper, scissors) || (rock, paper)
-    (humanChoice === "scissors" && computerChoice === "rock") ||
-    (humanChoice === "paper" && computerChoice === "scissors") ||
-    (humanChoice === "rock" && computerChoice === "paper")) {
-    computerScore++;} else {
-    
-    //else tie, play again
-    console.log("try again");
-} return humanScore, computerScore;
-}
+  let computerScore = 0;
+  let humanScore = 0;
   
-//create roundCount
-let roundCount = 5;
+  let roundCount = 0
 
-    //play game function calls play round 5 times
+  let winner = "";
 
-//if roundCount < 5, call playGame and roundCount + 1
-      for (let r = 0; r < roundCount; r++) {
-        console.log(playRound());
-    } return console.log(humanScore, computerScore);
+  let message = "";
+
+  const scoreDisplay = document.createElement('div');
+  const scoreDisplayContent = document.createElement('text');
+  //play round function
+  function playRound(e) {
+
+if (roundCount < 5) {
+    //take both choices
+    let computerChoice = getComputerChoice();
+    let humanChoice = e.currentTarget.id;
+    console.log(humanChoice);
+    //compare and increment correct score
+    //log winner
+    if (
+      (computerChoice == "rock" && humanChoice == "scissors") ||
+      (computerChoice == "paper" && humanChoice == "rock") ||
+      (computerChoice == "scissors" && humanChoice == "paper")
+    ) {
+      computerScore++;
+      message = "Computer Wins";
+    } else if (
+      (humanChoice == "rock" && computerChoice == "scissors") ||
+      (humanChoice == "paper" && humanChoice == "rock") ||
+      (humanChoice == "scissors" && computerChoice == "paper")
+    ) {
+      humanScore++;
+      message = "You Win";
+    }
+
+  roundCount ++
+} else {
+message = computerScore > humanScore ? 'You lose! Final Score ' : 'You win! Final Score '
 }
-console.log(playGame())
+
+  scoreDisplayContent.textContent = `${message} You: ${humanScore} Computer: ${computerScore}`;
+  scoreDisplay.appendChild(scoreDisplayContent);
+  console.log(roundCount)
+
+  }
+
+  const rockButton = document.createElement('button');
+  rockButton.id = 'rock'
+  rockButton.textContent = 'Rock';
+  rockButton.addEventListener('click', playRound);
+document.body.appendChild(rockButton);
+
+  const paperButton = document.createElement('button');
+  paperButton.id = 'paper'
+  paperButton.textContent = 'Paper';
+  paperButton.addEventListener('click', playRound);
+document.body.appendChild(paperButton);
+
+  const scissorsButton = document.createElement('button');
+  scissorsButton.id = 'scissors'
+  scissorsButton.textContent = 'Scissors';
+  scissorsButton.addEventListener('click', playRound);
+document.body.appendChild(scissorsButton);
+
+  document.body.appendChild(scoreDisplay)
+
+}
+ playGame()
